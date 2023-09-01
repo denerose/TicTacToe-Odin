@@ -1,0 +1,2 @@
+Tic Tac Toe Assignment - The Odin Project (TOP) - Javascript Path (primarily completed in Typescript)
+Learning modules, factories in JS, will probably be using classes and a constructor or interface to similar effect in TS.
