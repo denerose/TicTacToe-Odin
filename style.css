@@ -2,6 +2,7 @@
     --claret: #4d022b;
     --green: #024d24;
     --blue: #022b4d;
+    --light: #FBEDF5;
 }
 
 body {
@@ -15,6 +16,10 @@ header {
 footer {
     text-align: center;
     font-size: 0.8rem;
+}
+main {
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
 }
 
 #gameContainer {

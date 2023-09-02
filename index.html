@@ -10,11 +10,32 @@
 <body>
     <header>
         <h1>O - Noughts & Crosses - X</h1>
+        <p id="winnerDisplay">Play Now!</p>
     </header>
     <main>
-        <div id="playerOneContainter"></div>
+        <div id="playerOneContainter">
+            <form action="" id="P1Form">
+                <label for="p1NameInput">Player 1 Name</label>
+                <input type="text" name="" id="p1NameInput">
+                <button type="submit">Player 1 Ready</button>
+            </form>
+            <div id="Player1Display">
+                <p id="Player1Dipslay"></p>
+                <p>Score: <span id="P1Score"></span></p>
+            </div>
+        </div>
         <div id="gameContainer"></div>
-        <div id="playerTwoContainer"></div>
+        <div id="playerTwoContainer">
+            <form action="" id="P2Form">
+                <label for="p2NameInput">Player 2 Name</label>
+                <input type="text" name="" id="p1NameInput">
+                <button type="submit">Player 2 Ready</button>
+            </form>
+            <div id="Player2Display">
+                <p id="p2NameDisplay"></p>
+                <p>Score: <span id="P2Score"></span></p>
+            </div>
+        </div>
     </main>
     <footer>
         <p>Tic-Tac-Toe Assignment for <a href="https://www.theodinproject.com/lessons/node-path-javascript-tic-tac-toe">The Odin Project</a> by <a href="https://github.com/denerose/TicTacToe-Odin">@denerose</a></p>
