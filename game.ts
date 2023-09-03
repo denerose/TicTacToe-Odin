@@ -1,54 +1,101 @@
+namespace GameBoard {
+    interface Tile {
+        value: "" | "X" | "O";
+        tileID: number;
+    }
 
-class Player {
+    export const gameArray: Tile[] = []
 
-    constructor(name: string, mark: "X" | "O") {
+    export function newBoard() {
+        for (let index = 1; index <= 9; index++) {
+            let newTile: Tile = { value: "", tileID: index }
+            gameArray.push(newTile)
+        }
+    }
 
+    export function getTileStatus(ref: string) {
+        const tileIndex = GameBoard.gameArray.findIndex((tile) => {
+            if (ref === String(tile.tileID)) {
+                return true;
+            }
+            return false;
+        })
+        let tileStatus = GameBoard.gameArray[tileIndex].value
+        return (tileStatus)
+    }
+
+    export function setTileStatus(ref: string, status: "X" | "O") {
+        const tileIndex = GameBoard.gameArray.findIndex((tile) => {
+            if (ref === String(tile.tileID)) {
+                return true;
+            }
+            return false;
+        })
+        GameBoard.gameArray[tileIndex].value = status;
     }
 }
 
-namespace Game {
-    // square = the game element, tile = the display element
-    export const statusArray: ("X" | "O" | "")[] = ["", "O", "", "", "X", "", "", "", ""];
+class Player {
 
-    export function play(squareToPlay: string, marker: "X" | "O") {
-        const arrayRef = Number(squareToPlay);
-        Game.statusArray[arrayRef] = marker;
-        Display.refreshBoard();
+    constructor(public name: string, public marker: "X" | "O") {
+
+    }
+
+    playTile(tileRef: string) {
+        const mark = this.marker;
+        const tileToPlay = document.getElementById(tileRef) as HTMLDivElement
+        let currentStatus = GameBoard.getTileStatus(tileRef)
+        if (currentStatus != "") {
+            return
+        } else {
+            GameBoard.setTileStatus(tileRef, mark);
+        }
     }
 
 }
 
 namespace Display {
-    let gameContainer = document.getElementById("gameContainer") as HTMLDivElement;
-    function newTile(status: string, ref: number) {
-        const newDisplayTile = document.createElement("div");
-        newDisplayTile.innerText = status;
-        newDisplayTile.className = "square";
-        newDisplayTile.id = String(ref)
-        newDisplayTile.addEventListener("click", () => {
-            Game.play(newDisplayTile.id, "X")
-        })
-        return(newDisplayTile)
+
+    let Player1 = new Player("Saphron", "X");
+    let Player2 = new Player("Kim", "O");
+
+    let currentPlayer = Player1
+
+    function updatePlayer() {
+        if (currentPlayer === Player1) {
+            currentPlayer = Player2
+        }
+        else if (currentPlayer === Player2) {
+            currentPlayer = Player1
+        } else throw Error("wrong player!")
     }
 
-    export function setupBoard() {
-        Game.statusArray.forEach(tile => {
-            const tileRef = Game.statusArray.indexOf(tile);
-            gameContainer.appendChild(newTile(tile, tileRef))
-    })}
+function tileToAdd(status: string, ref: number) {
+    const newDisplayTile = document.createElement("div");
+    newDisplayTile.innerText = status;
+    newDisplayTile.id = String(ref);
+    newDisplayTile.className = "square"
+    newDisplayTile.addEventListener("click", () => {
+        currentPlayer.playTile(String(ref));
+        updatePlayer();
+        newDisplayTile.innerText = GameBoard.getTileStatus(newDisplayTile.id)
+    })
+    return (newDisplayTile)
+}
 
-    export function refreshBoard() {
-        const gameBoard = document.getElementsByClassName("square");
-        
-        Array.from(gameBoard).forEach((tile) => {
-            tile.remove();
-        })
-        setupBoard();
-    }
+export function displayBoard() {
+    const gameContainer = document.getElementById("gameContainer")
+    GameBoard.gameArray.forEach((item) => {
+        const status = item.value
+        const ID = item.tileID
+        gameContainer?.appendChild(tileToAdd(status, ID))
+    })
+}
 }
 
 function main() {
-    Display.setupBoard();
+    GameBoard.newBoard();
+    Display.displayBoard();
 }
 
-main()
+main();
