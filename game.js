@@ -69,9 +69,14 @@ var Display;
         newDisplayTile.id = String(ref);
         newDisplayTile.className = "square";
         newDisplayTile.addEventListener("click", () => {
-            currentPlayer.playTile(String(ref));
-            updatePlayer();
-            newDisplayTile.innerText = GameBoard.getTileStatus(newDisplayTile.id);
+            let currentTileStatus = GameBoard.getTileStatus(newDisplayTile.id);
+            if (currentTileStatus === "") {
+                currentPlayer.playTile(String(ref));
+                updatePlayer();
+                newDisplayTile.innerText = GameBoard.getTileStatus(newDisplayTile.id);
+            }
+            else
+                return;
         });
         return (newDisplayTile);
     }
