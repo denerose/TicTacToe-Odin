@@ -33,6 +33,27 @@ namespace GameBoard {
         })
         GameBoard.gameArray[tileIndex].value = status;
     }
+
+    export function checkForWin(currentMark: "X" | "O"): boolean {
+        let win = false
+        const winRows: number[][] = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+        ]
+        winRows.forEach((possibleWin, i) => {
+            if (gameArray[possibleWin[0]].value === currentMark && gameArray[possibleWin[1]].value === currentMark
+                && gameArray[possibleWin[2]].value === currentMark) {
+                win = true
+            }
+        })
+        return (win)
+    }
 }
 
 class Player {
@@ -58,42 +79,53 @@ namespace Display {
 
     let Player1 = new Player("Saphron", "X");
     let Player2 = new Player("Kim", "O");
+    let winner = ''
 
     let currentPlayer = Player1
 
+    function showWinner(winnerName: string) {
+        const winnerDisplay = document.getElementById("winnerDisplay")
+        if (winnerDisplay) winnerDisplay.innerText = winnerName + " wins!!!"
+    }
+
     function updatePlayer() {
-        if (currentPlayer === Player1) {
+        if (GameBoard.checkForWin(currentPlayer.marker)) {
+            winner = currentPlayer.name
+            showWinner(winner);
+        }
+        else if (currentPlayer === Player1) {
             currentPlayer = Player2
         }
         else if (currentPlayer === Player2) {
             currentPlayer = Player1
-        } else throw Error("wrong player!")
+        } else return
     }
 
-function tileToAdd(status: string, ref: number) {
-    const newDisplayTile = document.createElement("div");
-    newDisplayTile.innerText = status;
-    newDisplayTile.id = String(ref);
-    newDisplayTile.className = "square"
-    newDisplayTile.addEventListener("click", () => {
-        let currentTileStatus = GameBoard.getTileStatus(newDisplayTile.id)
-        if (currentTileStatus === "") {
-        currentPlayer.playTile(String(ref));
-        updatePlayer();
-        newDisplayTile.innerText = GameBoard.getTileStatus(newDisplayTile.id)}
-        else return;
-    })
-    return (newDisplayTile)
-}
+    function tileToAdd(status: string, ref: number) {
+        const newDisplayTile = document.createElement("div");
+        newDisplayTile.innerText = status;
+        newDisplayTile.id = String(ref);
+        newDisplayTile.className = "square"
+        newDisplayTile.addEventListener("click", () => {
+            let currentTileStatus = GameBoard.getTileStatus(newDisplayTile.id)
+            if (currentTileStatus === "") {
+                currentPlayer.playTile(String(ref));
+                newDisplayTile.innerText = GameBoard.getTileStatus(newDisplayTile.id)
+                updatePlayer();
+            }
+            else return;
+        })
+        return (newDisplayTile)
+    }
 
-export function displayBoard() {
-    const gameContainer = document.getElementById("gameContainer")
-    GameBoard.gameArray.forEach((item) => {
-        const status = item.value
-        const ID = item.tileID
-        gameContainer?.appendChild(tileToAdd(status, ID))
-    })
-}
+    export function displayBoard() {
+        const gameContainer = document.getElementById("gameContainer")
+        GameBoard.gameArray.forEach((item) => {
+            const status = item.value
+            const ID = item.tileID
+            gameContainer?.appendChild(tileToAdd(status, ID))
+        })
+    }
 }
 
 function main() {

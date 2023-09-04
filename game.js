@@ -30,6 +30,27 @@ var GameBoard;
         GameBoard.gameArray[tileIndex].value = status;
     }
     GameBoard.setTileStatus = setTileStatus;
+    function checkForWin(currentMark) {
+        let win = false;
+        const winRows = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+        ];
+        winRows.forEach((possibleWin, i) => {
+            if (GameBoard.gameArray[possibleWin[0]].value === currentMark && GameBoard.gameArray[possibleWin[1]].value === currentMark
+                && GameBoard.gameArray[possibleWin[2]].value === currentMark) {
+                win = true;
+            }
+        });
+        return (win);
+    }
+    GameBoard.checkForWin = checkForWin;
 })(GameBoard || (GameBoard = {}));
 class Player {
     constructor(name, marker) {
@@ -52,16 +73,26 @@ var Display;
 (function (Display) {
     let Player1 = new Player("Saphron", "X");
     let Player2 = new Player("Kim", "O");
+    let winner = '';
     let currentPlayer = Player1;
+    function showWinner(winnerName) {
+        const winnerDisplay = document.getElementById("winnerDisplay");
+        if (winnerDisplay)
+            winnerDisplay.innerText = winnerName + " wins!!!";
+    }
     function updatePlayer() {
-        if (currentPlayer === Player1) {
+        if (GameBoard.checkForWin(currentPlayer.marker)) {
+            winner = currentPlayer.name;
+            showWinner(winner);
+        }
+        else if (currentPlayer === Player1) {
             currentPlayer = Player2;
         }
         else if (currentPlayer === Player2) {
             currentPlayer = Player1;
         }
         else
-            throw Error("wrong player!");
+            return;
     }
     function tileToAdd(status, ref) {
         const newDisplayTile = document.createElement("div");
@@ -72,8 +103,8 @@ var Display;
             let currentTileStatus = GameBoard.getTileStatus(newDisplayTile.id);
             if (currentTileStatus === "") {
                 currentPlayer.playTile(String(ref));
-                updatePlayer();
                 newDisplayTile.innerText = GameBoard.getTileStatus(newDisplayTile.id);
+                updatePlayer();
             }
             else
                 return;
