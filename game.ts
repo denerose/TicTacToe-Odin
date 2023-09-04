@@ -73,6 +73,10 @@ class Player {
         }
     }
 
+    setName(newName: string) {
+        this.name = newName;
+    }
+
 }
 
 namespace Display {
@@ -126,10 +130,29 @@ namespace Display {
             gameContainer?.appendChild(tileToAdd(status, ID))
         })
     }
+
+    export function addPlayerInputButtons() {
+        const P1Form = document.getElementById("P1Form") as HTMLFormElement
+        const P2Form = document.getElementById("P1Form") as HTMLFormElement
+
+        P1Form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const P1Input = document.getElementById("P1Name") as HTMLInputElement
+            Player1.setName(P1Input.value)
+        })
+
+        P2Form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const P2Input = document.getElementById("P2Name") as HTMLInputElement
+            Player2.setName(P2Input.value)
+        })
+    }
+
 }
 
 function main() {
     GameBoard.newBoard();
+    Display.addPlayerInputButtons();
     Display.displayBoard();
 }
 

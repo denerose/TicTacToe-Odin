@@ -68,6 +68,9 @@ class Player {
             GameBoard.setTileStatus(tileRef, mark);
         }
     }
+    setName(newName) {
+        this.name = newName;
+    }
 }
 var Display;
 (function (Display) {
@@ -120,9 +123,25 @@ var Display;
         });
     }
     Display.displayBoard = displayBoard;
+    function addPlayerInputButtons() {
+        const P1Form = document.getElementById("P1Form");
+        const P2Form = document.getElementById("P1Form");
+        P1Form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const P1Input = document.getElementById("P1Name");
+            Player1.setName(P1Input.value);
+        });
+        P2Form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const P2Input = document.getElementById("P2Name");
+            Player2.setName(P2Input.value);
+        });
+    }
+    Display.addPlayerInputButtons = addPlayerInputButtons;
 })(Display || (Display = {}));
 function main() {
     GameBoard.newBoard();
+    Display.addPlayerInputButtons();
     Display.displayBoard();
 }
 main();

@@ -42,3 +42,8 @@ main {
     text-align: center;
     line-height: 100px;
 }
+
+form {
+    display: grid;
+    gap: 5px;
+}
