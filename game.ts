@@ -54,11 +54,16 @@ namespace GameBoard {
         })
         return (win)
     }
+
+    export function checkForTie(): boolean {
+       const tieTest = gameArray.every(tile => tile.value != "") 
+       return(tieTest)
+    }
 }
 
 class Player {
 
-    constructor(public name: string, public marker: "X" | "O") {
+    constructor(public name: string, public marker: "X" | "O", private score: number) {
 
     }
 
@@ -77,25 +82,48 @@ class Player {
         this.name = newName;
     }
 
+    getScore() {return(this.score)}
+
+    setScore() {this.score++}
 }
 
 namespace Display {
 
-    let Player1 = new Player("Saphron", "X");
-    let Player2 = new Player("Kim", "O");
-    let winner = ''
+    let Player1 = new Player("Saphron", "X", 0);
+    let Player2 = new Player("Kim", "O", 0);
+    let winner = ""
 
     let currentPlayer = Player1
+
+    function updateScores() {
+        const P1Display = document.getElementById("P1Score")
+        const P2Display = document.getElementById("P2Score")
+        if (P1Display) P1Display.innerText = String(Player1.getScore())
+        if (P2Display) P2Display.innerText = String(Player2.getScore())
+    }
 
     function showWinner(winnerName: string) {
         const winnerDisplay = document.getElementById("winnerDisplay")
         if (winnerDisplay) winnerDisplay.innerText = winnerName + " wins!!!"
+        updateScores();
+    }
+
+    function showTie() {
+        if (winner = "DRAW") {
+        const winnerDisplay = document.getElementById("winnerDisplay")
+        if (winnerDisplay) winnerDisplay.innerText = "TIE! No one wins :("
+        } else return
     }
 
     function updatePlayer() {
         if (GameBoard.checkForWin(currentPlayer.marker)) {
             winner = currentPlayer.name
+            currentPlayer.setScore();
             showWinner(winner);
+        }
+        else if (GameBoard.checkForTie()) {
+            winner = "DRAW"
+            showTie();
         }
         else if (currentPlayer === Player1) {
             currentPlayer = Player2
@@ -112,7 +140,7 @@ namespace Display {
         newDisplayTile.className = "square"
         newDisplayTile.addEventListener("click", () => {
             let currentTileStatus = GameBoard.getTileStatus(newDisplayTile.id)
-            if (currentTileStatus === "") {
+            if (currentTileStatus === "" && winner === "") {
                 currentPlayer.playTile(String(ref));
                 newDisplayTile.innerText = GameBoard.getTileStatus(newDisplayTile.id)
                 updatePlayer();
@@ -129,6 +157,7 @@ namespace Display {
             const ID = item.tileID
             gameContainer?.appendChild(tileToAdd(status, ID))
         })
+        updateScores();
     }
 
     export function addPlayerInputButtons() {

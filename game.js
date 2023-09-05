@@ -51,11 +51,17 @@ var GameBoard;
         return (win);
     }
     GameBoard.checkForWin = checkForWin;
+    function checkForTie() {
+        const tieTest = GameBoard.gameArray.every(tile => tile.value != "");
+        return (tieTest);
+    }
+    GameBoard.checkForTie = checkForTie;
 })(GameBoard || (GameBoard = {}));
 class Player {
-    constructor(name, marker) {
+    constructor(name, marker, score) {
         this.name = name;
         this.marker = marker;
+        this.score = score;
     }
     playTile(tileRef) {
         const mark = this.marker;
@@ -71,22 +77,47 @@ class Player {
     setName(newName) {
         this.name = newName;
     }
+    getScore() { return (this.score); }
+    setScore() { this.score++; }
 }
 var Display;
 (function (Display) {
-    let Player1 = new Player("Saphron", "X");
-    let Player2 = new Player("Kim", "O");
-    let winner = '';
+    let Player1 = new Player("Saphron", "X", 0);
+    let Player2 = new Player("Kim", "O", 0);
+    let winner = "";
     let currentPlayer = Player1;
+    function updateScores() {
+        const P1Display = document.getElementById("P1Score");
+        const P2Display = document.getElementById("P2Score");
+        if (P1Display)
+            P1Display.innerText = String(Player1.getScore());
+        if (P2Display)
+            P2Display.innerText = String(Player2.getScore());
+    }
     function showWinner(winnerName) {
         const winnerDisplay = document.getElementById("winnerDisplay");
         if (winnerDisplay)
             winnerDisplay.innerText = winnerName + " wins!!!";
+        updateScores();
+    }
+    function showTie() {
+        if (winner = "DRAW") {
+            const winnerDisplay = document.getElementById("winnerDisplay");
+            if (winnerDisplay)
+                winnerDisplay.innerText = "TIE! No one wins :(";
+        }
+        else
+            return;
     }
     function updatePlayer() {
         if (GameBoard.checkForWin(currentPlayer.marker)) {
             winner = currentPlayer.name;
+            currentPlayer.setScore();
             showWinner(winner);
+        }
+        else if (GameBoard.checkForTie()) {
+            winner = "DRAW";
+            showTie();
         }
         else if (currentPlayer === Player1) {
             currentPlayer = Player2;
@@ -104,7 +135,7 @@ var Display;
         newDisplayTile.className = "square";
         newDisplayTile.addEventListener("click", () => {
             let currentTileStatus = GameBoard.getTileStatus(newDisplayTile.id);
-            if (currentTileStatus === "") {
+            if (currentTileStatus === "" && winner === "") {
                 currentPlayer.playTile(String(ref));
                 newDisplayTile.innerText = GameBoard.getTileStatus(newDisplayTile.id);
                 updatePlayer();
@@ -121,6 +152,7 @@ var Display;
             const ID = item.tileID;
             gameContainer === null || gameContainer === void 0 ? void 0 : gameContainer.appendChild(tileToAdd(status, ID));
         });
+        updateScores();
     }
     Display.displayBoard = displayBoard;
     function addPlayerInputButtons() {
