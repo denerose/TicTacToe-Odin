@@ -4,13 +4,17 @@ namespace GameBoard {
         tileID: number;
     }
 
-    export const gameArray: Tile[] = []
+    export let gameArray: Tile[] = []
 
     export function newBoard() {
         for (let index = 1; index <= 9; index++) {
             let newTile: Tile = { value: "", tileID: index }
             gameArray.push(newTile)
         }
+    }
+
+    export function clearBoard() {
+        gameArray.length = 0
     }
 
     export function getTileStatus(ref: string) {
@@ -116,13 +120,16 @@ namespace Display {
     }
 
     function updatePlayer() {
+        const resetBtn = document.getElementById("resetBtn") as HTMLButtonElement
         if (GameBoard.checkForWin(currentPlayer.marker)) {
             winner = currentPlayer.name
             currentPlayer.setScore();
+            resetBtn.disabled = false
             showWinner(winner);
         }
         else if (GameBoard.checkForTie()) {
             winner = "DRAW"
+            resetBtn.disabled = false
             showTie();
         }
         else if (currentPlayer === Player1) {
@@ -152,6 +159,7 @@ namespace Display {
 
     export function displayBoard() {
         const gameContainer = document.getElementById("gameContainer")
+        if (gameContainer) gameContainer.innerHTML = ""
         GameBoard.gameArray.forEach((item) => {
             const status = item.value
             const ID = item.tileID
@@ -160,21 +168,44 @@ namespace Display {
         updateScores();
     }
 
+    export function refreshGame() {
+        const btn1 = document.getElementById("P1btn") as HTMLButtonElement
+        const btn2 = document.getElementById("P2btn") as HTMLButtonElement
+        btn1.disabled = false
+        btn2.disabled = false
+        GameBoard.clearBoard()
+        GameBoard.newBoard()
+        displayBoard()
+    }
+
     export function addPlayerInputButtons() {
         const P1Form = document.getElementById("P1Form") as HTMLFormElement
         const P2Form = document.getElementById("P1Form") as HTMLFormElement
+        const resetBtn = document.getElementById("resetBtn") as HTMLButtonElement
 
         P1Form.addEventListener("submit", (e) => {
             e.preventDefault();
             const P1Input = document.getElementById("P1Name") as HTMLInputElement
+            const btn = document.getElementById("P1btn") as HTMLButtonElement
             Player1.setName(P1Input.value)
+            btn.disabled = true
         })
 
         P2Form.addEventListener("submit", (e) => {
             e.preventDefault();
             const P2Input = document.getElementById("P2Name") as HTMLInputElement
+            const btn = document.getElementById("P2btn") as HTMLButtonElement
             Player2.setName(P2Input.value)
+            btn.disabled = true
         })
+
+        resetBtn.addEventListener("click", () => {
+            refreshGame()
+            resetBtn.disabled = true
+        })
+
+        resetBtn.disabled = true
+
     }
 
 }

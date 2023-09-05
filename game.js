@@ -9,6 +9,10 @@ var GameBoard;
         }
     }
     GameBoard.newBoard = newBoard;
+    function clearBoard() {
+        GameBoard.gameArray.length = 0;
+    }
+    GameBoard.clearBoard = clearBoard;
     function getTileStatus(ref) {
         const tileIndex = GameBoard.gameArray.findIndex((tile) => {
             if (ref === String(tile.tileID)) {
@@ -110,13 +114,16 @@ var Display;
             return;
     }
     function updatePlayer() {
+        const resetBtn = document.getElementById("resetBtn");
         if (GameBoard.checkForWin(currentPlayer.marker)) {
             winner = currentPlayer.name;
             currentPlayer.setScore();
+            resetBtn.disabled = false;
             showWinner(winner);
         }
         else if (GameBoard.checkForTie()) {
             winner = "DRAW";
+            resetBtn.disabled = false;
             showTie();
         }
         else if (currentPlayer === Player1) {
@@ -147,6 +154,8 @@ var Display;
     }
     function displayBoard() {
         const gameContainer = document.getElementById("gameContainer");
+        if (gameContainer)
+            gameContainer.innerHTML = "";
         GameBoard.gameArray.forEach((item) => {
             const status = item.value;
             const ID = item.tileID;
@@ -155,19 +164,39 @@ var Display;
         updateScores();
     }
     Display.displayBoard = displayBoard;
+    function refreshGame() {
+        const btn1 = document.getElementById("P1btn");
+        const btn2 = document.getElementById("P2btn");
+        btn1.disabled = false;
+        btn2.disabled = false;
+        GameBoard.clearBoard();
+        GameBoard.newBoard();
+        displayBoard();
+    }
+    Display.refreshGame = refreshGame;
     function addPlayerInputButtons() {
         const P1Form = document.getElementById("P1Form");
         const P2Form = document.getElementById("P1Form");
+        const resetBtn = document.getElementById("resetBtn");
         P1Form.addEventListener("submit", (e) => {
             e.preventDefault();
             const P1Input = document.getElementById("P1Name");
+            const btn = document.getElementById("P1btn");
             Player1.setName(P1Input.value);
+            btn.disabled = true;
         });
         P2Form.addEventListener("submit", (e) => {
             e.preventDefault();
             const P2Input = document.getElementById("P2Name");
+            const btn = document.getElementById("P2btn");
             Player2.setName(P2Input.value);
+            btn.disabled = true;
         });
+        resetBtn.addEventListener("click", () => {
+            refreshGame();
+            resetBtn.disabled = true;
+        });
+        resetBtn.disabled = true;
     }
     Display.addPlayerInputButtons = addPlayerInputButtons;
 })(Display || (Display = {}));

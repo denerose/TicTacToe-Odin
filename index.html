@@ -11,13 +11,15 @@
     <header>
         <h1>O - Noughts & Crosses - X</h1>
         <p id="winnerDisplay">Play Now!</p>
+        <button type="button" id="resetBtn" disabled="true">Reset Game</button>
+        <p></p>
     </header>
     <main>
         <div id="playerOneContainter">
             <form action="" id="P1Form">
                 <label for="P1Name">Player 1 Name</label>
                 <input type="text" id="P1Name">
-                <button type="submit">Player 1 Ready</button>
+                <button type="submit" id="P1btn">Player 1 Ready</button>
             </form>
             <div id="Player1Display">
                 <p id="p1NameDisplay"></p>
@@ -29,7 +31,7 @@
             <form action="" id="P2Form">
                 <label for="P2Name">Player 2 Name</label>
                 <input type="text" id="P2Name">
-                <button type="submit">Player 2 Ready</button>
+                <button type="submit" id="P2btn">Player 2 Ready</button>
             </form>
             <div id="Player2Display">
                 <p id="p2NameDisplay"></p>
