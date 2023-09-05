@@ -2,6 +2,10 @@
 var GameBoard;
 (function (GameBoard) {
     GameBoard.gameArray = [];
+    function getBoard() {
+        return (GameBoard.gameArray);
+    }
+    GameBoard.getBoard = getBoard;
     function newBoard() {
         for (let index = 1; index <= 9; index++) {
             let newTile = { value: "", tileID: index };
@@ -172,6 +176,7 @@ var Display;
         GameBoard.clearBoard();
         GameBoard.newBoard();
         displayBoard();
+        winner = "";
     }
     Display.refreshGame = refreshGame;
     function addPlayerInputButtons() {

@@ -6,6 +6,10 @@ namespace GameBoard {
 
     export let gameArray: Tile[] = []
 
+    export function getBoard(){
+        return(gameArray)
+    }
+
     export function newBoard() {
         for (let index = 1; index <= 9; index++) {
             let newTile: Tile = { value: "", tileID: index }
@@ -176,6 +180,7 @@ namespace Display {
         GameBoard.clearBoard()
         GameBoard.newBoard()
         displayBoard()
+        winner = ""
     }
 
     export function addPlayerInputButtons() {
