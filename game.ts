@@ -4,7 +4,7 @@ namespace GameBoard {
         tileID: number;
     }
 
-    export let gameArray: Tile[] = []
+    const gameArray: Tile[] = []
 
     export function getBoard(){
         return(gameArray)
@@ -22,24 +22,24 @@ namespace GameBoard {
     }
 
     export function getTileStatus(ref: string) {
-        const tileIndex = GameBoard.gameArray.findIndex((tile) => {
+        const tileIndex = GameBoard.getBoard().findIndex((tile) => {
             if (ref === String(tile.tileID)) {
                 return true;
             }
             return false;
         })
-        let tileStatus = GameBoard.gameArray[tileIndex].value
+        let tileStatus = GameBoard.getBoard()[tileIndex].value
         return (tileStatus)
     }
 
     export function setTileStatus(ref: string, status: "X" | "O") {
-        const tileIndex = GameBoard.gameArray.findIndex((tile) => {
+        const tileIndex = GameBoard.getBoard().findIndex((tile) => {
             if (ref === String(tile.tileID)) {
                 return true;
             }
             return false;
         })
-        GameBoard.gameArray[tileIndex].value = status;
+        GameBoard.getBoard()[tileIndex].value = status;
     }
 
     export function checkForWin(currentMark: "X" | "O"): boolean {
@@ -164,7 +164,7 @@ namespace Display {
     export function displayBoard() {
         const gameContainer = document.getElementById("gameContainer")
         if (gameContainer) gameContainer.innerHTML = ""
-        GameBoard.gameArray.forEach((item) => {
+        GameBoard.getBoard().forEach((item) => {
             const status = item.value
             const ID = item.tileID
             gameContainer?.appendChild(tileToAdd(status, ID))

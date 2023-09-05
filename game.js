@@ -1,41 +1,41 @@
 "use strict";
 var GameBoard;
 (function (GameBoard) {
-    GameBoard.gameArray = [];
+    const gameArray = [];
     function getBoard() {
-        return (GameBoard.gameArray);
+        return (gameArray);
     }
     GameBoard.getBoard = getBoard;
     function newBoard() {
         for (let index = 1; index <= 9; index++) {
             let newTile = { value: "", tileID: index };
-            GameBoard.gameArray.push(newTile);
+            gameArray.push(newTile);
         }
     }
     GameBoard.newBoard = newBoard;
     function clearBoard() {
-        GameBoard.gameArray.length = 0;
+        gameArray.length = 0;
     }
     GameBoard.clearBoard = clearBoard;
     function getTileStatus(ref) {
-        const tileIndex = GameBoard.gameArray.findIndex((tile) => {
+        const tileIndex = GameBoard.getBoard().findIndex((tile) => {
             if (ref === String(tile.tileID)) {
                 return true;
             }
             return false;
         });
-        let tileStatus = GameBoard.gameArray[tileIndex].value;
+        let tileStatus = GameBoard.getBoard()[tileIndex].value;
         return (tileStatus);
     }
     GameBoard.getTileStatus = getTileStatus;
     function setTileStatus(ref, status) {
-        const tileIndex = GameBoard.gameArray.findIndex((tile) => {
+        const tileIndex = GameBoard.getBoard().findIndex((tile) => {
             if (ref === String(tile.tileID)) {
                 return true;
             }
             return false;
         });
-        GameBoard.gameArray[tileIndex].value = status;
+        GameBoard.getBoard()[tileIndex].value = status;
     }
     GameBoard.setTileStatus = setTileStatus;
     function checkForWin(currentMark) {
@@ -51,8 +51,8 @@ var GameBoard;
             [2, 4, 6],
         ];
         winRows.forEach((possibleWin, i) => {
-            if (GameBoard.gameArray[possibleWin[0]].value === currentMark && GameBoard.gameArray[possibleWin[1]].value === currentMark
-                && GameBoard.gameArray[possibleWin[2]].value === currentMark) {
+            if (gameArray[possibleWin[0]].value === currentMark && gameArray[possibleWin[1]].value === currentMark
+                && gameArray[possibleWin[2]].value === currentMark) {
                 win = true;
             }
         });
@@ -60,7 +60,7 @@ var GameBoard;
     }
     GameBoard.checkForWin = checkForWin;
     function checkForTie() {
-        const tieTest = GameBoard.gameArray.every(tile => tile.value != "");
+        const tieTest = gameArray.every(tile => tile.value != "");
         return (tieTest);
     }
     GameBoard.checkForTie = checkForTie;
@@ -160,7 +160,7 @@ var Display;
         const gameContainer = document.getElementById("gameContainer");
         if (gameContainer)
             gameContainer.innerHTML = "";
-        GameBoard.gameArray.forEach((item) => {
+        GameBoard.getBoard().forEach((item) => {
             const status = item.value;
             const ID = item.tileID;
             gameContainer === null || gameContainer === void 0 ? void 0 : gameContainer.appendChild(tileToAdd(status, ID));
