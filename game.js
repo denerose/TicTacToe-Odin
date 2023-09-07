@@ -171,8 +171,7 @@ var Display;
             gameContainer === null || gameContainer === void 0 ? void 0 : gameContainer.appendChild(tileToAdd(status, ID));
         });
         updateScores();
-        if (winnerDisplay)
-            winnerDisplay.innerText = "Play Now!";
+        winnerDisplay.innerText = "Play Now!";
     }
     Display.displayBoard = displayBoard;
     function refreshGame() {
