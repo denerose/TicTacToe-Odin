@@ -54,6 +54,10 @@ var GameBoard;
             if (gameArray[possibleWin[0]].value === currentMark && gameArray[possibleWin[1]].value === currentMark
                 && gameArray[possibleWin[2]].value === currentMark) {
                 win = true;
+                possibleWin.forEach((winningTile, i) => {
+                    let winID = gameArray[winningTile].tileID;
+                    Display.makeWinTile(winID);
+                });
             }
         });
         return (win);
@@ -204,6 +208,11 @@ var Display;
         resetBtn.disabled = true;
     }
     Display.addPlayerInputButtons = addPlayerInputButtons;
+    function makeWinTile(tileID) {
+        const winningTile = document.getElementById(String(tileID));
+        winningTile.className = "winTile";
+    }
+    Display.makeWinTile = makeWinTile;
 })(Display || (Display = {}));
 function main() {
     GameBoard.newBoard();

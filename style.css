@@ -47,3 +47,15 @@ form {
     display: grid;
     gap: 5px;
 }
+
+.winTile {
+    background-color: var(--light);
+    font-size: 3rem;
+    padding: 1rem;
+    margin: 1px;
+    width: 100px;
+    height: 100px;
+    border: 0.1px solid var(--claret);
+    text-align: center;
+    line-height: 100px;
+}
