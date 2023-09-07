@@ -162,6 +162,7 @@ var Display;
     }
     function displayBoard() {
         const gameContainer = document.getElementById("gameContainer");
+        const winnerDisplay = document.getElementById("winnerDisplay");
         if (gameContainer)
             gameContainer.innerHTML = "";
         GameBoard.getBoard().forEach((item) => {
@@ -170,6 +171,8 @@ var Display;
             gameContainer === null || gameContainer === void 0 ? void 0 : gameContainer.appendChild(tileToAdd(status, ID));
         });
         updateScores();
+        if (winnerDisplay)
+            winnerDisplay.innerText = "Play Now!";
     }
     Display.displayBoard = displayBoard;
     function refreshGame() {
@@ -181,6 +184,7 @@ var Display;
         GameBoard.newBoard();
         displayBoard();
         winner = "";
+        currentPlayer = Player1;
     }
     Display.refreshGame = refreshGame;
     function addPlayerInputButtons() {

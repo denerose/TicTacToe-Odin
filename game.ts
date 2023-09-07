@@ -167,6 +167,7 @@ namespace Display {
 
     export function displayBoard() {
         const gameContainer = document.getElementById("gameContainer")
+        const winnerDisplay = document.getElementById("winnerDisplay")
         if (gameContainer) gameContainer.innerHTML = ""
         GameBoard.getBoard().forEach((item) => {
             const status = item.value
@@ -174,6 +175,7 @@ namespace Display {
             gameContainer?.appendChild(tileToAdd(status, ID))
         })
         updateScores();
+        if (winnerDisplay) winnerDisplay.innerText = "Play Now!"
     }
 
     export function refreshGame() {
@@ -185,6 +187,7 @@ namespace Display {
         GameBoard.newBoard()
         displayBoard()
         winner = ""
+        currentPlayer = Player1
     }
 
     export function addPlayerInputButtons() {
